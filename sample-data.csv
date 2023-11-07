@@ -1,0 +1,11 @@
+CM_name,sit-service1service2-as3
+CM_namespace,applicationspace
+AS3_tenant,TENANT-CLIENT-DC2_TEST
+AS3_snat,/Common/Service_SNATPOOL
+AS3_RD,3
+APP_service,service
+APP_client,client
+APP_site,DC2
+APP_env,TEST
+APP_instances,3
+APP_vips,172.28.110.33,172.28.110.35

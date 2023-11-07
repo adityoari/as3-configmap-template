@@ -1,0 +1,121 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ data.CM_name }}
+  namespace: {{ data.CM_namespace }}
+  labels:
+    f5type: virtual-server
+    as3: "true"
+data:
+  template: | 
+    {
+      "class": "AS3",
+      "declaration": {
+        "{{ data.AS3_tenant }}": {
+          "Shared": {
+            "class": "Application",
+          {%- for key,value in data.DATA_vipdict.items() %}
+            "service_address_{{ value.name }}": {
+              "class": "Service_Address",
+              "virtualAddress": "{{ value.ip }}",
+              "routeAdvertisement": "any"
+            },
+        {%- endfor %}
+          {%- for item in data.DATA_indices %}
+            "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_TCP_ANY": {
+              "class": "Monitor",
+              "interval": 60,
+              "monitorType": "tcp",
+              "targetAddress": "",
+              "timeout": 180,
+              "adaptive": false,
+              "receive": "",
+              "send": ""
+            },
+            "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_POOL": {
+              "class": "Pool",
+              "members": [
+                {
+                  "serverAddresses": [],
+                  "servicePort": {{ data.DATA_tcpbacks[item] }},
+                  "shareNodes": true
+                }
+              ],
+              "monitors": [
+                {
+                  "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_TCP_ANY"
+                }
+              ]
+            },
+            "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_PROPF_TCP": {
+              "class": "TCP_Profile",
+              "idleTimeout": 14880,
+              "keepAliveInterval": 14700
+            },
+            "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_VS_{{ data.DATA_tcpfront }}": {
+              "class": "Service_TCP",
+              "virtualAddresses": [
+                {
+                  "use": "service_address_{{ data.DATA_vipdict[item].name }}"
+                }
+              ],
+              "virtualPort": {{ data.DATA_tcpfront }},
+              "snat": {
+                "bigip": "{{ data.AS3_snat }}"
+              },
+              "pool": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_POOL",
+              "profileTCP": {
+                "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_PROPF_TCP"
+              },
+              "mirroring": "L4"
+            },
+            "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixudp }}_UDP_ANY": {
+              "class": "Monitor",
+              "interval": 60,
+              "monitorType": "udp",
+              "targetAddress": "",
+              "timeout": 180,
+              "adaptive": false,
+              "receive": "",
+              "send": ""
+            },
+            "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixudp }}_POOL": {
+              "class": "Pool",
+              "members": [
+                {
+                  "serverAddresses": [],
+                  "servicePort": {{ data.DATA_udpbacks[item] }},
+                  "shareNodes": true
+                }
+              ],
+              "monitors": [
+                {
+                  "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixudp }}_UDP_ANY"
+                }
+              ]
+            },
+            "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixudp }}_VS_4343": {
+              "class": "Service_UDP",
+              "virtualAddresses": [
+                {
+                  "use": "service_address_{{ data.DATA_vipdict[item].name }}"
+                }
+              ],
+              "virtualPort": 4343,
+              "snat": {
+                "bigip": "{{ data.AS3_snat }}"
+              },
+              "pool": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixudp }}_POOL"
+            },
+          {%- endfor %}
+            "template": "shared"
+          },
+          "class": "Tenant",
+          "defaultRouteDomain": {{ data.AS3_RD }}
+        },
+        "class": "ADC",
+        "label": "CIS AS3 ConfigMap for {{ data.CM_namespace }} {{ data.APP_service }}1 to {{ data.APP_service }}{{ data.APP_instances }} in {{ data.APP_env }} {{ data.APP_site }}",
+        "remark": "CIS AS3 ConfigMap for {{ data.CM_namespace }} {{ data.APP_service }}1 to {{ data.APP_service }}{{ data.APP_instances }} in {{ data.APP_env }} {{ data.APP_site }}",
+        "schemaVersion": "3.45.0"
+      }
+    }
