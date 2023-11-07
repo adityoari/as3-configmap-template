@@ -66,9 +66,9 @@ def processDataDict(dataDict):
         
     # Add Monitor list
     if 'APP_env' in dataDict.keys():
-        dataDict['DATA_monitors'] = list(range(1,CONST_monitors_env))
+        dataDict['DATA_monitors'] = list(range(1,CONST_monitors_env+1))
     else:
-        dataDict['DATA_monitors'] = list(range(1,CONST_monitors_noenv))
+        dataDict['DATA_monitors'] = list(range(1,CONST_monitors_noenv+1))
 
     # Add indices parameter based on instances
     if int(dataDict['APP_instances'])>1:
