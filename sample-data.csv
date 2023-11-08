@@ -8,4 +8,6 @@ APP_client,client
 APP_site,DC2
 APP_env,TEST
 APP_instances,3
-APP_vips,172.28.110.33,172.28.110.35
+APP_vip,172.128.1.1
+APP_ports_tcp,443,443
+APP_ports_udp,53,30053,increment

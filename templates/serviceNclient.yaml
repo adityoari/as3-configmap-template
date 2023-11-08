@@ -34,7 +34,7 @@ data:
               "monitors": [
               {%- for mon in data.DATA_monitors %}
                 { 
-                  "bigip": "/Common/nv_ingress-worker{{ mon }}_{{ data.DATA_site_lower }}{{ '-' if data.DATA_env_lower }}{{ data.DATA_env_lower }}_HTTPS_32443" 
+                  "bigip": "/Common/nv{{ item }}_ingress-worker{{ mon }}{{ '_' if data.DATA_env_lower }}{{ data.DATA_site_lower if data.DATA_env_lower }}{{ '-' if data.DATA_env_lower }}{{ data.DATA_env_lower }}_HTTPS_32443" 
                 }{{ ',' if not loop.last }}
               {%- endfor %}
               ],
@@ -74,7 +74,7 @@ data:
               "monitors": [
               {%- for mon in data.DATA_monitors %}
                 { 
-                  "bigip": "/Common/nv_ingress-worker{{ mon }}_{{ data.DATA_site_lower }}{{ '-' if data.DATA_env_lower }}{{ data.DATA_env_lower }}_HTTPS_32443" 
+                  "bigip": "/Common/nv{{ item }}_ingress-worker{{ mon }}{{ '_' if data.DATA_env_lower }}{{ data.DATA_site_lower if data.DATA_env_lower }}{{ '-' if data.DATA_env_lower }}{{ data.DATA_env_lower }}_HTTPS_32443" 
                 }{{ ',' if not loop.last }}
               {%- endfor %}
               ],
