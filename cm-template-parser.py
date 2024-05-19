@@ -11,7 +11,10 @@ CONST_monitors_noenv = 20
 # Parse command-line arguments: <template-directory>/<template-file>
 # return names of template directory and template file
 def parseArgs():
-    if len(sys.argv)>=2:
+    print('sys argv len = {}'.format(len(sys.argv)))
+    for i in sys.argv:
+            print('i : {}'.format(i))
+    if len(sys.argv)>=3:
             templDir,templFile = sys.argv[1].split('/')
             dataFile = sys.argv[2]
     else:
@@ -143,7 +146,7 @@ def main():
 
     as3 = templ.render(data=dataDict)
     
-    outFile = dataFile.replace('.csv', '.yaml.out')
+    outFile = dataFile.replace('.csv', '.out.yaml')
     with open(outFile, 'w') as f:
         print('{}'.format(as3), file=f)
 
