@@ -161,6 +161,7 @@ cython_debug/
 
 # output files
 .out
+.yaml.out
 .out.yaml
 
 # private folder
