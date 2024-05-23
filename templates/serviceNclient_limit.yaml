@@ -22,6 +22,17 @@ data:
             },
         {%- endfor %}
           {%- for item in data.DATA_indices %}
+            "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_HTTP_8181": {
+              "class": "Monitor",
+              "interval": 5,
+              "monitorType": "http",
+              "targetAddress": "",
+              "targetPort": 8181,
+              "timeout": 16,
+              "adaptive": false,
+              "receive": "",
+              "send": "GET /rest/highAvailability/v1/status HTTP/1.1\r\nHost:8181\r\nConnection:Close\r\n\r\n"
+            },
             "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_POOL": {
               "class": "Pool",
               "members": [
@@ -32,11 +43,9 @@ data:
                 }
               ],
               "monitors": [
-              {%- for mon in data.DATA_monitors %}
                 { 
-                  "bigip": "/Common/nv{{ item }}_ingress-worker{{ mon }}{{ '_' if data.DATA_env_lower }}{{ data.DATA_site_lower if data.DATA_env_lower }}{{ '-' if data.DATA_env_lower }}{{ data.DATA_env_lower }}_HTTPS_32443" 
-                }{{ ',' if not loop.last }}
-              {%- endfor %}
+                  "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_HTTP_8181"
+                }
               ],
               "minimumMonitors": 1
             },
@@ -72,6 +81,7 @@ data:
                   "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_SS_PROPF_TCP"
                 }
               },
+              "rateLimit": "240",
               "mirroring": "L4"
             },
             "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixudp }}_POOL": {
@@ -84,11 +94,9 @@ data:
                 }
               ],
               "monitors": [
-              {%- for mon in data.DATA_monitors %}
                 { 
-                  "bigip": "/Common/nv{{ item }}_ingress-worker{{ mon }}{{ '_' if data.DATA_env_lower }}{{ data.DATA_site_lower if data.DATA_env_lower }}{{ '-' if data.DATA_env_lower }}{{ data.DATA_env_lower }}_HTTPS_32443" 
-                }{{ ',' if not loop.last }}
-              {%- endfor %}
+                  "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_HTTP_8181"
+                }
               ],
               "minimumMonitors": 1
             },
