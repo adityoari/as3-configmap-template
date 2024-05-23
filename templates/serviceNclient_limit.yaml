@@ -47,6 +47,7 @@ data:
                   "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_HTTP_8181"
                 }
               ],
+              "serviceDownAction": "reset",
               "minimumMonitors": 1
             },
             "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_CS_PROPF_TCP": {
@@ -81,7 +82,7 @@ data:
                   "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_SS_PROPF_TCP"
                 }
               },
-              "rateLimit": "240",
+              "rateLimit": 240,
               "mirroring": "L4"
             },
             "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixudp }}_POOL": {
@@ -98,6 +99,7 @@ data:
                   "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_HTTP_8181"
                 }
               ],
+              "serviceDownAction": "reset",
               "minimumMonitors": 1
             },
             "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixudp }}_VS_4343": {

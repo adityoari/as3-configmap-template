@@ -47,6 +47,7 @@ data:
                   "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_HTTP_8181"
                 }
               ],
+              "serviceDownAction": "reset",
               "minimumMonitors": 1
             },
             "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_CS_PROPF_TCP": {
@@ -97,6 +98,7 @@ data:
                   "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_HTTP_8181"
                 }
               ],
+              "serviceDownAction": "reset",
               "minimumMonitors": 1
             },
             "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixudp }}_VS_4343": {
