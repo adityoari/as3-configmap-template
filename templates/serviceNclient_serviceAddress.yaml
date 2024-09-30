@@ -14,6 +14,13 @@ data:
         "{{ data.AS3_tenant }}": {
           "Shared": {
             "class": "Application",
+          {%- for key,value in data.DATA_vipdict.items() %}
+            "service_address_{{ value.name }}": {
+              "class": "Service_Address",
+              "virtualAddress": "{{ value.ip }}",
+              "routeAdvertisement": "any"
+            },
+        {%- endfor %}
           {%- for item in data.DATA_indices %}
             "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_HTTP_8181": {
               "class": "Monitor",
@@ -57,7 +64,7 @@ data:
               "class": "Service_TCP",
               "virtualAddresses": [
                 {
-                  "bigip": "/Common/{{ data.DATA_vipdict[item].ip }}%{{ data.AS3_RD }}"
+                  "use": "service_address_{{ data.DATA_vipdict[item].name }}"
                 }
               ],
               "virtualPort": {{ data.DATA_tcpfront }},
@@ -98,7 +105,7 @@ data:
               "class": "Service_UDP",
               "virtualAddresses": [
                 {
-                  "bigip": "/Common/{{ data.DATA_vipdict[item].ip }}%{{ data.AS3_RD }}"
+                  "use": "service_address_{{ data.DATA_vipdict[item].name }}"
                 }
               ],
               "virtualPort": 4343,
