@@ -23,7 +23,7 @@ data:
               "targetPort": 8181,
               "timeout": 16,
               "adaptive": false,
-              "receive": "",
+              "receive": "200 OK",
               "send": "GET /rest/highAvailability/v1/status HTTP/1.1\r\nHost:8181\r\nConnection:Close\r\n\r\n"
             },
             "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_POOL": {
