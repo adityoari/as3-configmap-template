@@ -63,11 +63,11 @@ data:
               },
               "pool": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_POOL",
               "profileTCP": {
-                "ingress:": 
+                "ingress": 
                 {
                   "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_CS_PROPF_TCP"
                 },
-                "egress:": 
+                "egress": 
                 {
                   "use": "{{ data.APP_service }}{{ item }}{{ data.DATA_prefixtcp }}_SS_PROPF_TCP"
                 }
